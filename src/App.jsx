@@ -6,7 +6,8 @@ import { lightTheme, darkTheme } from "./Layout/Themes";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Provider } from "react-redux";
 import { store } from "./Components/Store/Store";
-import CheckOut from "./Pages/CheckOut";
+import Checkout from "./Pages/Checkout";
+import CheckoutSuccess from "./Pages/CheckoutSuccess";
 
 function App() {
   const [chosenTheme, setChosenTheme] = useState(lightTheme);
@@ -32,7 +33,8 @@ function App() {
           <Navbar setChosenTheme={setChosenTheme} />
           <Routes>
             <Route index path="/" element={<Home />} />
-            <Route path="/checkout" element={<CheckOut />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout-success" element={<CheckoutSuccess />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

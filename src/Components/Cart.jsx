@@ -9,7 +9,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSpring, animated } from "@react-spring/web";
 import { removeItem } from "./Store/InventorySlice";
@@ -19,6 +19,7 @@ const Cart = ({ cartOpen, setCartOpen }) => {
   const items = useSelector((state) => state.items);
   const dispatch = useDispatch();
   const theme = useTheme();
+  const [error, setError] = useState(true);
 
   const drawerAnimation = useSpring({
     transform: cartOpen ? `translateX(0%)` : `translateX(100%)`,
@@ -27,6 +28,13 @@ const Cart = ({ cartOpen, setCartOpen }) => {
 
   const handleCartDrawerToggle = () => {
     setCartOpen(!cartOpen);
+    console.log(items.length);
+    console.log(error);
+    if (items.length > 0) {
+      setError(false);
+    } else {
+      setError(true);
+    }
   };
 
   const truncateTitle = (title, maxLength) => {
@@ -134,7 +142,7 @@ const Cart = ({ cartOpen, setCartOpen }) => {
             </Box>
           </Box>
           <Link
-            to="/checkout"
+            to={(error && "/") || "/checkout"}
             style={{
               textDecoration: "none",
               color: "inherit",
@@ -145,17 +153,28 @@ const Cart = ({ cartOpen, setCartOpen }) => {
               sx={{
                 marginX: 3,
                 padding: 1.5,
-                marginBottom: 3,
                 borderRadius: 2,
                 boxShadow: 5,
                 backgroundColor: theme.customStyles.bgCustomCheckOut,
               }}
             >
               <Typography sx={{ color: theme.customStyles.typoCustomCheckOut }}>
-                Proceed to CheckOut
+                Proceed to Checkout
               </Typography>
             </Box>
           </Link>
+          {error && (
+            <Typography
+              sx={{
+                color: "red",
+                marginLeft: 4,
+                marginBottom: 3,
+                marginTop: 1,
+              }}
+            >
+              Please add items to your cart
+            </Typography>
+          )}
         </animated.div>
       </Drawer>
     </>
