@@ -28,8 +28,6 @@ const Cart = ({ cartOpen, setCartOpen }) => {
 
   const handleCartDrawerToggle = () => {
     setCartOpen(!cartOpen);
-    console.log(items.length);
-    console.log(error);
     if (items.length > 0) {
       setError(false);
     } else {

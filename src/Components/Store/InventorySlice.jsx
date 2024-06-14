@@ -1,11 +1,7 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { items: [] };
-
-const calculateSubTotal = (items) => {
-  return items
-    .reduce((acc, item) => acc + item.price * item.quantity, 0)
-    .toFixed(2);
+const initialState = {
+  items: JSON.parse(localStorage.getItem("Inventory")) || [],
 };
 
 const InventorySlice = createSlice({
@@ -14,22 +10,24 @@ const InventorySlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       state.items.push(action.payload);
-      const subTotal = calculateSubTotal(state.items);
-      localStorage.setItem("subTotal", subTotal);
+      localStorage.setItem("Inventory", JSON.stringify(state.items));
     },
     updateItems: (state, action) => {
       state.items = action.payload;
-      const subTotal = calculateSubTotal(state.items);
-      localStorage.setItem("subTotal", subTotal);
+      localStorage.setItem("Inventory", JSON.stringify(state.items));
     },
     removeItem: (state, action) => {
       state.items = state.items.filter((item) => item.UID !== action.payload);
-      const subTotal = calculateSubTotal(state.items);
-      localStorage.setItem("subTotal", subTotal);
+      localStorage.setItem("Inventory", JSON.stringify(state.items));
+    },
+    clearItems: (state) => {
+      state.items = [];
+      localStorage.setItem("Inventory", null);
     },
   },
 });
 
-export const { addItem, removeItem, updateItems } = InventorySlice.actions;
+export const { addItem, removeItem, updateItems, clearItems } =
+  InventorySlice.actions;
 
 export default InventorySlice.reducer;

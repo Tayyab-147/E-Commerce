@@ -8,12 +8,13 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const stripePromise = loadStripe(
   "pk_test_51PQS8TBayfxC7JbyYcy5hRQsthlp8sfpj73oUOLIphhlP1X9jtpVbFI2eASqiLnMTGFEwT75ZgYgzS2FVdmIV14b00riEH2umt"
 );
 
-const CheckoutForm = ({ onSuccess }) => {
+const CheckoutForm = ({ subTotal }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [processing, setProcessing] = useState(false);
@@ -36,7 +37,6 @@ const CheckoutForm = ({ onSuccess }) => {
     } else {
       setError(null);
       setProcessing(false);
-      onSuccess(); // Call onSuccess callback
     }
   };
 
@@ -44,6 +44,9 @@ const CheckoutForm = ({ onSuccess }) => {
     <Box sx={{ padding: 4 }}>
       <form onSubmit={handleSubmit}>
         <PaymentElement />
+        <Typography sx={{ marginTop: 2 }}>
+          Amount to be deducted: <b>${subTotal}</b>
+        </Typography>
         <Button
           type="submit"
           variant="contained"
@@ -61,7 +64,11 @@ const CheckoutForm = ({ onSuccess }) => {
 const Checkout = () => {
   const [clientSecret, setClientSecret] = useState("");
   const [paymentSucceeded, setPaymentSucceeded] = useState(false);
-  const subTotal = localStorage.getItem("subTotal");
+  const items = useSelector((state) => state.items);
+  const subTotal = items
+    .reduce((acc, item) => acc + item.price * item.quantity, 0)
+    .toFixed(2);
+  localStorage.setItem("subTotal", subTotal);
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
@@ -97,7 +104,7 @@ const Checkout = () => {
             Stripe Payment
           </Typography>
         </Box>
-        <CheckoutForm onSuccess={handleSuccess} />
+        <CheckoutForm onSuccess={handleSuccess} subTotal={subTotal} />
       </Elements>
     )
   );

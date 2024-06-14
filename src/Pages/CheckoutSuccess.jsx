@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { clearItems } from "../Components/Store/InventorySlice";
 
 const CheckoutSuccess = () => {
   const subTotal = localStorage.getItem("subTotal");
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(clearItems());
+  }, []);
 
   return (
     <Box sx={{ textAlign: "center", marginTop: 10 }}>

@@ -9,9 +9,6 @@ dotenv.config();
 const app = express();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Log the Stripe secret key to verify it is loaded correctly (for debugging only, remove in production)
-console.log("Stripe Secret Key:", process.env.STRIPE_SECRET_KEY);
-
 app.use(bodyParser.json());
 
 // Configure CORS

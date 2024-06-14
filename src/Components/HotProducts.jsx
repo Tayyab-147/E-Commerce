@@ -35,7 +35,6 @@ const HotItems = () => {
       const updatedItems = items.map((item) =>
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       );
-      console.log(updatedItems);
       dispatch(updateItems(updatedItems));
     } else {
       dispatch(addItem({ ...product, UID: nanoid(), quantity: 1 }));
